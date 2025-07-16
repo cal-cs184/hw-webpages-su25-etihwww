@@ -74,13 +74,42 @@
 				I also included points where L is equal to 0 to make sure all the edges are rasterized.
 				If the conditions are met, fill in that pixel with the color given.
 			</p>
+
+
 			<figure>
 				<img src="task1-test4.png" alt="Lion" style="width:100%" />
 				<figcaption>basic/test4.svg</figcaption>
 			</figure>
 
-			<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
+			<h3>
+				Extra Credit: Make triangle rasterizer super fast
+			</h3>
 
+			<p>
+				First of all, I rewrote the edge functions, in the form L = A * x + B * y + C,
+				which is the line equation.
+				where \[ A_i = -dy_i, B_i = dx_i, C_i = dy_i * x_i - dx_i * y_i \]
+				Then, I used the step incremental method for the line equations.
+				Instead of doing the same math over and over for every pixel,
+				I noticed that the result for one pixel is very similar to the one right next to it.
+				So, I calculated the values once at the start of each row,
+				and then just added \(B_i\) each time I moved to the next pixel.
+				This saved a lot of time because adding is much faster than doing full calculations at every step.
+			</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="task1_extra1.png" style="width:40%" />
+							<figcaption>before optimizing.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="task1_extra2.png" style="width:40%"  />
+							<figcaption>before optimizing.</figcaption>
+						</td>
+					
+				</table>
+			</div>
 
 			<h2>Task 2: Antialiasing by Supersampling</h2>
 			<p>
