@@ -1,112 +1,361 @@
 <html>
-	<head>
-		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-		<style>
-			h1 {
-				text-align: center;
-			}
+<head>
+	<title>Homework 1 Rasterizer</title>
+	<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+	<style>
+		h1 {
+			text-align: center;
+		}
 
-			.container {
-				margin: 0 auto;
-				padding: 60px 20%;
-			}
+		.container {
+			margin: 0 auto;
+			padding: 60px 20%;
+		}
 
-			figure {
-				text-align: center;
-			}
+		figure {
+			text-align: center;
+		}
 
-			img {
-				display: inline-block;
-			}
+		img {
+			display: inline-block;
+		}
 
-			body {
-				font-family: 'Inter', sans-serif;
-			}
-		</style>
-	</head>
+		body {
+			font-family: 'Inter', sans-serif;
+		}
+	</style>
+</head>
 	<body>
 		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 1 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+			<h1>CS184/284A Summer 2025 Homework 1 Write-Up</h1>
+			<div style="text-align: center;">Names: Zhengzheng Luo </div>
 
-		<br>
+			<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-		
-		<br>
+			Link to webpage: <a href="https://github.com/cal-cs184/hw-webpages-su25-etihwww">TODO</a>
+			To do this, go to the ¡°Settings¡± tab on the repository, and click on ¡°Pages¡±. Under ¡°Build and Deployment¡±, ensure that it chooses teh source to be ¡°Deploy from a branch¡±. From there, select the branch that you¡¯d like to deploy (most often ¡°main¡±), and set the folder to be ¡°root¡±. Then, click save.
 
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+			<br>
 
-		<figure>
-			<img src="lion.jpg" alt="Lion" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
+			Link to GitHub repository: <a href="https://github.com/cal-cs184/hw-rasterizer-super-awesome-name">https://github.com/cal-cs184/hw-rasterizer-super-awesome-name</a>
 
-		<!--
-		We've already added one heading per task, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
 
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
-		<h2>Task 1: Drawing Single-Color Triangles</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<!--
+	We've already added one heading per task, to make your write-up as navigable when grading. Please fit your write-up within these sections!
+	-->
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="lion.jpg" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
-		
-		<h2>Task 2: Antialiasing by Supersampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h2>Overview</h2>
+			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
-		<h2>Task 3: Transforms</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h2>Task 1: Drawing Single-Color Triangles</h2>
+			<p>
+				First, I defined the bounding box, which contains the triangle and helps limit the number of samples to check.
+				It's defined by the mininum and maximum \(x\) and \(y\) verticies, where \(floor(x_{min}, y_{min})\) is the top left of the box, and \(ceiling(x_{max}, y_{max})\) is the bottom right of the box.
+			</p>
+			<p>
+				Then, looping through each point in the rectangle, I checked whether the point <b>p</b> lies within the triangle.
+				Because screen sample positions are located at half-integer coordinates in screen space, we need to add 0.5 to the original coordinate.
+				To do this, I used the three line test.
+				I defined each edge as a line using the equation described in lecture 2,
+				where \[ L_i(p_x, p_y) = -(p_x - x_i)*(y_{i+1} - y_i) + (p_y - y_i)*(x_{i+1} - x_i) \]
+			</p>
+			<p>
+				If all three L's are greater than 1, then the point is inside the triangle.
+				To draw the triangle regardless of the winding order of the vertices, I included samples where all
+				three L's are less than 1.
+				I also included points where L is equal to 0 to make sure all the edges are rasterized.
+				If the conditions are met, fill in that pixel with the color given.
+			</p>
+			<figure>
+				<img src="task1-test4.png" alt="Lion" style="width:100%" />
+				<figcaption>basic/test4.svg</figcaption>
+			</figure>
 
-		<h2>Task 4: Barycentric coordinates</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
 
-		<h2>Task 5: "Pixel sampling" for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h2>Task 2: Antialiasing by Supersampling</h2>
+			<p>
+				First of all, to support supersampling, I scaled sample_buffer up by sample_rate, because each pixel is divided into sample_rate subsamples.
+				I updated RasterizerImp::set_sample_rate() and RasterizerImp::set_framebuffer_target()
+				to make sure sample_buffer is resized when needed.
 
-		<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			</p>
+			<p>
+				In RasterizerImp::resolve_to_framebuffer(), I added 2 inner loops to iterate over the subsamples.
+				Because sample_buffer is multiplied by sample_rate, how we map the 2D pixel coordinates (x, y) to a 1D array index should also change.
+				I came up with this formula:
+				\[ index = ((y * grid\_size + j) * width * (grid\_size)) + (x * grid\_size + i) \]
+				where grid_size is the square root of sample_rate.
+				To average the colors, I initialized Color col with rgb = 000. In each iteration col is updated by 1.0f/sample_rate of the color of the subsample.
+			</p>
+			<p>
+				Then, I updated RasterizerImp::rasterize_triangle() to support supersampling. First step is to scale the dimensions of the bounding box
+				accordingly by grid_size. Then, since the pixel is divided, we also need to recalculate the center, dividing \(p_x + 0.5\)
+				and \(p_y + 0.5\) by grid_size.
+			</p>
+			<p>
+				In RasterizerImp::fill_pixel, I changed sample_buffer[y * width + x] to sample_buffer[y * width * grid_size + x] to map the index in sample_buffer
+				correctky. I also edited RasterizerImp::rasterize_point, where I just simply filled all the subsamples with the same color.
+			</p>
+			<h3>Why is supersampling useful?</h3>
+			<p>
+				Supersampling makes images look smoother by taking multiple color samples per pixel and averaging them.
+				This helps reduce jagged edges and noise. For example, the triangles from Task 1 looks jagged and some of them
+				are even cut-off, because a pixel only has 2 colors to choose from, for example, either pink or white(which is the background color).
+				But as the sample rate goes higher, the edges get smoother, because the color is being averaged from subsamples.
+			</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="task2_rate1.png" width="400px" />
+							<figcaption>sample rate 1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="task2_rate4.png" width="400px" />
+							<figcaption>sample rate 4.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="task2_rate9.png" width="400px" />
+							<figcaption>sample rate 9.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="task2_rate16.png" width="400px" />
+							<figcaption>sample rate 16.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
+
+			<h2>Task 3: Transforms</h2>
+			<p>
+				Look! Cubeman is wearing cal gear and dancing! He¡¯s leaping mid-air like an epic superhero! His arms are crossed to make an epic dance move!
+				I rotated both his left and right legs clockwise. I rotated his left arm downwards(counterclockwise), and right arm upwards. I also translated his right arm
+				to the other side of his body for the epic dance move. Great job, cubeman!
+			</p>
+
+			<figure>
+				<img src="task3.png" alt="Lion" style="width:100%" />
+				<figcaption>my cool cubeman!</figcaption>
+			</figure>
+
+			<h2>Task 4: Barycentric coordinates</h2>
+			<p>
+				Imagine a triangle with three corners: <b>A, B, and C</b>.
+				pick any Vertex <b>V</b> inside the triangle.
+				Barycentric coordinates are a way to describe where <b>V</b> is using <b>A, B, and C</b>:
+				\[ V = \alpha A + \beta B + \gamma C \]
+				where ¦Á, ¦Â, and ¦Ã are the barycentric coordinates, and
+				\[\alpha + \beta + \gamma = 1\]
+				Using an image from lecture 5, we can see that the color of V is mostly mixed with blue and green,
+				and a little bit of red. This is because V is very far away from A (the red vertex),
+				so ¦Á (the coordinate corresponding to red) becomes very small compared to ¦Â and ¦Ã.
+			</p>
+
+			<figure>
+				<img src="task4_triangle.png" alt="Lion" style="width:100%" />
+				<figcaption>an example of barycentric coordinates from lecture 5</figcaption>
+			</figure>
+			<figure>
+				<img src="task4.png" alt="Lion" style="width:100%" />
+				<figcaption>test7.svg </figcaption>
+			</figure>
+
+			<h2>Task 5: "Pixel sampling" for texture mapping</h2>
+			<p>
+				Pixel sampling is used to map a texture onto screen space pixels.
+				Given both the screen-space (x, y) coordinates and texture-space (u, v)
+				coordinates of the three triangle vertices,
+				we can compute the barycentric coordinates of each pixel inside the triangle.
+				These barycentric coordinates are then used to interpolate the (u, v) texture coordinates across
+				the triangle surface.
+				The interpolated (u, v) at each pixel tells us where to sample the texture,
+				and pixel sampling is used to determine the final color. In task 5 I used two pixel sampling techniques: nearest neighbor and bilinear interpolation.
+			</p>
+			<p>
+
+				Nearest-neighbor sampling selects the texel whose center is closest to the given (u, v) texture coordinate.
+				We assume uv coordinates range from 0 to 1, so I checked for bounds and returned Color(1, 0, 1) given in
+				starter code for invalid inputs. Then I multiplied them by (width) and (height) to convert to texel space,
+				then round to the nearest integer to select the closest texel.
+
+			</p>
+			<p>
+
+				Bilinear interpolation, on the other hand,
+				blends the colors of the 4 closest texels to get a
+				smoother color at a specific (u, v) texture coordinate by
+				finding the 4 nearest texels (top left, top right, bottom left, bottom right).
+				I defined the lerp function, which blends between two values, as a lambda.
+				\[ lerp(x, v0, v1) = v0 + x(v1 - v0)\]
+				Use the lerp function on the top2 and bottom2 texels, and blend them at the end to get
+				the final color.
+
+			</p>
+
+			<p>
+				To implement RasterizerImp::rasterize_textured_triangle, I reused code from
+				rasterize_interpolated_color_triangle. Instead of interpolating Color,
+				the function interpolates (u, v), then sample the texture using the
+				specified pixel sampling methods, nearest or bilinear.
+			</p>
+
+			<p>
+				Below are screenshots of the  two sampling methods at different sampling rates
+				zoomed in on the number '8'. Using nearest, we can see that the edge is chunky and jagged.
+				Bilinear, on the other hand, looks smooth and blended. Increasing sample rate does not make a
+				big difference with bilinear.
+			</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="task5_nearest1.png" width="400px" />
+							<figcaption>nearest sampling at 1 sample per pixel.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="task5_nearest16.png" width="400px" />
+							<figcaption>nearest sampling at 16 samples per pixel.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="task5_bi1.png" width="400px" />
+							<figcaption>bilinear sampling at 1 sample per pixel.</figcaption>
+						</td>
+
+						<td style="text-align: center;">
+							<img src="task5_bi16.png" width="400px" />
+							<figcaption>bilinear sampling at 16 sample per pixel.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<h2>Task 6: "Level Sampling" with mipmaps for texture mapping</h2>
+			<p>
+				Level sampling decides which mipmap level we should use when sampling.
+				If a large texture is drawn onto a small screen area, it's very likely to
+				get aliasing patterns. Therefore, we pick a smaller mipmap level that matches the screen size
+				and filters out high frequency.
+
+			</p>
+
+			<p>
+				I implement Texture::sample as stated in the spec, which selects different sampling method
+				and levels
+				based on the params given. When lsm == L_ZERO, the function samples from level 0, which is the same as task5.
+				When lsm == L_NEAREST, the function computes the nearest mipmap level by calling get_level(sp) and rounding it
+				to the nearest integer. When lsm == L_LINEAR, mipmap level is computed as a continuous number.
+				The weight sum is computed with lerp in task 5.
+			</p>
+
+			<p>
+				I implemented the helper function, Texture::get_level.
+				to decide which mipmap level to use based on how much the texture is stretched on screen.
+				By taking the change in UV coordinates between neighboring pixels and
+				scaling them by the texture's width and height,
+				the function estimates how much texture space one screen pixel covers.
+				then take the maximum stretch and apply log2 to get the appropriate mipmap level,
+				since each level is half the resolution of the previous.
+				Finally, we need to make sure
+				the level to stay within the available mipmap levels to avoid invalid access.
+			</p>
+
+			<p>
+				I also made changes in rasterize_textured_triangle. Unlike in pervious tasks, I needed to
+				compute the barycentric coordinates of (x, y), (x + 1, y), and (x, y + 1), and made my code super messy and hard to debug.
+				So I added a helper compute_barycentric to organize my code a bit. At the end, I assigned all
+				required parameters to a SampleParams struct, and passed it to Texture::sample.
+			</p>
+
+			<p>
+				Pixel sampling is fast and cheap in memory
+				but limited antialiasing power. nearest is sharp but jagged, and
+				bilinear is smoother but blurrier.
+				Level sampling adds memory by storing downscaled versions of the texture,
+				but greatly improves performance and antialiasing power when textures shrink on screen.
+				Multiple samples per pixel has the best antialiasing power but at the cost of much higher memory usage.
+				So the tradeoff is that the more quality the more speed or memory.
+			</p>
+
+			<figure>
+				<img src="soccer.png" alt="Lion" style="width:30%" />
+				<figcaption>soccer.png</figcaption>
+			</figure>
+			<p>
+				Here's an example When a texture is zoomed out.
+				L_NEAREST and P_LINEAR is the best method,
+				because it effectively reduces aliasing.
+			</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="L_ZERO_P_NEAREST.png" width="400px" />
+							<figcaption>L_ZERO and P_NEAREST.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="L_ZERO_P_LINEAR.png" width="400px" />
+							<figcaption>L_ZERO and P_LINEAR.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="L_NEAREST_P_NEAREST.png" width="400px" />
+							<figcaption>L_NEAREST and P_NEAREST.</figcaption>
+						</td>
+
+						<td style="text-align: center;">
+							<img src="L_NEAREST_P_LINEAR.png" width="400px" />
+							<figcaption>L_NEAREST and P_LINEAR.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>
+				Here's an example When a texture is zoomed in.
+				L_NEAREST is the best method.
+			</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="1.png" width="400px" />
+							<figcaption>L_ZERO and P_NEAREST.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="2.png" width="400px" />
+							<figcaption>L_ZERO and P_LINEAR.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="3.png" width="400px" />
+							<figcaption>L_NEAREST and P_NEAREST.</figcaption>
+						</td>
+
+						<td style="text-align: center;">
+							<img src="4.png" width="400px" />
+							<figcaption>L_NEAREST and P_LINEAR.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+
+
+			<h2>(Optional) Task 7: Extra Credit - Draw Something Creative!</h2>
+
+
 		</div>
 	</body>
 </html>
