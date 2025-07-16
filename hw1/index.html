@@ -34,7 +34,7 @@
 			<br>
 
 			Link to webpage: <a href="https://cal-cs184.github.io/hw-webpages-su25-etihwww/hw1/index.html">https://cal-cs184.github.io/hw-webpages-su25-etihwww/hw1/index.html</a>
-			
+
 
 			<br>
 
@@ -47,8 +47,14 @@
 	-->
 
 			<h2>Overview</h2>
-			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
-
+			For this project,
+			I built a basic rasterizer that can draw and color triangles,
+			apply supersampling for smoother edges, handle transforms,
+			and map textures with antialiasing.
+			The goal was to create a simple vector graphics renderer that can load SVG files and display them accurately.
+			By the end, I had a working system that can turn vector shapes into pixel images, similar to how web browsers render SVGs.
+			I learned how concepts like barycentric coordinates, supersampling, and mipmaps actually work to produce antialiased images.
+			It was really cool to see how combining these techniques directly affects rendering quality.
 			<h2>Task 1: Drawing Single-Color Triangles</h2>
 			<p>
 				First, I defined the bounding box, which contains the triangle and helps limit the number of samples to check.
