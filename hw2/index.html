@@ -25,92 +25,290 @@
 			}
 		</style>
 	</head>
+<title>
+	Homework 2
+</title>
 	<body>
 		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 2 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+			<h1>CS184/284A Spring 2025 Homework 2 Write-Up</h1>
+			<div style="text-align: center;">Names: Zhengzheng Luo</div>
 
-		<br>
+			<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+			Link to webpage: <a href="https://cal-cs184.github.io/hw-webpages-su25-etihwww/hw2/index.html">https://cal-cs184.github.io/hw-webpages-su25-etihwww</a>
 
-		<br>
-		
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
+			<br>
 
-		<figure>
-			<img src="teapot.png" alt="Teapot" style="width:50%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
+			Link to GitHub repository: <a href="https://github.com/cal-cs184/hw-rasterizer-super-awesome-name">https://github.com/cal-cs184/hw-rasterizer-super-awesome-name</a>
 
-		<!--
-		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
 
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
-		<h2>Section I: Bezier Curves and Surfaces</h2>
+			<!--
+	We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
+	-->
 
-		<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h2>Overview</h2>
+			Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="teapot.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			</table>
-		</div>
+			<h2>Section I: Bezier Curves and Surfaces</h2>
 
-		<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h3>Part 1: Bezier curves with 1D de Casteljau subdivision</h3>
 
-		<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
+			<p>
+				De Casteljau¡¯s algorithm finds a point on a B¨¦zier curve by repeatedly lerping between control points.
+				At each step, it creates new points between the existing ones.
+				Given \(n\) control points, we can use use linear interpolation to find \(n-1\) new points. To implement
+				<code>evaluateStep</code>, I added a helper function<code>lerp</code>, which uses linear interpolation
+				to find a point between two values. In <code>evaluteStep</code>, I simply looped through each pair of
+				neighboring control points and used <code>lerp</code> to find points in between based on \(t\).
+				Then, I collected all these in-between points into a new vector, which contains the next level of control points in the algorithm.
+			</p>
 
-		<h3>Part 3: Area-weighted vertex normals</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>
+				Below are screenshots of each level of the evaluation from the original control points down to the final evaluated point.
+			</p>
 
-		<h3>Part 4: Edge flip</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="section1\part1_1.png" width="400px" />
+							<figcaption>Level 0: Original control points.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="section1\part1_2.png" width="400px" />
+							<figcaption>Level 1: 5 interpolated points.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="section1\part1_3.png" width="400px" />
+							<figcaption>Level 2: 4 interpolated points .</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="section1\part1_4.png" width="400px" />
+							<figcaption>Level 3: 3 interpolated points.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="section1\part1_5.png" width="400px" />
+							<figcaption>Level 4: 2 interpolated points .</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="section1\part1_6.png" width="400px" />
+							<figcaption>Level 5: Final evaluated point.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
 
-		<h3>Part 5: Edge split</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<figure>
+				<img src="section1\part1_7.png" alt="Teapot" style="width:60%" />
+				<figcaption>Completed Bezier curve.</figcaption>
+			</figure>
+			<figure>
+				<img src="section1\part1_8.png" alt="Teapot" style="width:60%" />
+				<figcaption>A slightly different Bezier curve, with different control points and \(t\).</figcaption>
+			</figure>
 
-		<h3>Part 6: Loop subdivision for mesh upsampling</h3>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<h3>Part 2: Bezier surfaces with separable 1D de Casteljau</h3>
+			<p>
+				De Casteljau¡¯s algorithm extends to B¨¦zier surfaces by applying the algorithm twice.
+				Once parameterized by \(u\), and then in parameterized by \(v\).
+				This creates a surface from a grid of control points.
+				It¡¯s like doing curve evaluation along one axis, then blending those results along the other.
+			</p>
 
-		<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>
+				The implementation of <code>BezierPatch::evaluateStep</code> is very similar to part 1, only difference is that we are dealing with 3D points.
+				<code>BezierPatch::evaluate1D</code> recursively applies De Casteljau¡¯s algorithm on a list of control points until only one point remains.
+				<code>BezierPatch::evaluate</code> first defines a Bezier curve parameterized by
+				\(u\) for each row of the \(n*n\) grid of control points
+				using De Casteljau¡¯s algorithm,
+				giving a list of intermediate points.
+				Then it evaluates that list at the parameter \(v\) to compute the final point on the Bezier surface at
+				\((u,v)\).
+			</p>
 
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
+			<figure>
+				<img src="section1\part2.png" alt="Teapot" style="width:60%" />
+				<figcaption>Screenshot of bez/teapot.bez.</figcaption>
+			</figure>
+
+
+
+			<h2>Section II: Triangle Meshes and Half-Edge Data Structure</h2>
+
+			<h3>Part 3: Area-weighted vertex normals</h3>
+
+
+			<p>
+				To implement <code>Vertex::normal()</code>, I looped through all adjacent faces of the vertex by traversing all the half edges that
+				point outward with <code>halfedge->twin()->next()</code>.
+				For each face, I recorded the positions its vertices
+				\(v_0, v_1, v_2\), where \(v_0\) is the current vertex.
+				I then computed the normal, which is the cross product of \(v_1 - v_0\) and \(v_2 - v_0\).
+				Then, I multiplied the normal by the area of the face. Finally, I summed up all the area-weighted normals and normalized
+				the result to obtain the vertex normal.
+			</p>
+
+			<figure>
+				<img src="section2\part3.png" alt="Teapot" style="width:60%" />
+				<figcaption>Screenshot of pressing Q, bez/teapot.bez.</figcaption>
+			</figure>
+
+			<h3>Part 4: Edge flip</h3>
+			<p>
+				To implement <code>HalfedgeMesh::flipEdge</code>, I created a visualization of the mesh structure
+				before and after the flip. Then I drew arrows to indicate the directions
+				of the halfedges, and labeled all the elements involved. I found the helper function
+				<code>Halfedge::setNeighbors</code> really helpful. I looked at the diagram and figured out
+				how to reassign the pointers. at first glance,
+				it might seem like the edge bc should be deleted.
+				However, I found out that all we actually need to do is reassign the next pointers
+				of the adjacent halfedges correctly to reflect the new structure.
+				For example, the halfedge that e0 points at, should have vertex a as neighbor instead of vertex b.
+				It should also be the next of halfedge ca, and its next should point to dc. The next of dc should also
+				be reassigned to ca. I reassigned the neighboring elements of all the halfedges according to the diagram
+				shown below.
+
+
+				Then, I reassigned the halfedges for the 2 faces, and verteices
+				a and b. vertex a now points to a new halfedge ad after the flip, and b only points to bd. Before the flip, both
+				bc and bd point away from vertex b.
+			</p>
+
+			<figure>
+				<img src="section2\part4_1.png" alt="Teapot" style="width:80%" />
+				<figcaption>the mesh before and after flip.</figcaption>
+			</figure>
+
+			<p>
+				My debugging journey was not fun, but I learned a lot from it.
+				At first, I attempted to reassign every neighboring element of each halfedge
+				directly using long pointer chains like <code>halfedge->next()->next()->vertex()</code>
+				instead of clearly defining variables like <code>VertexIter vertexA</code>.
+				This quickly turned into nearly a hundred lines of messy, unreadable code.
+				I had no idea which variable referred to which part of the mesh anymore,
+				and the lack of clear naming led to tons of repetitive work.
+				UThen the code became impossible to debug,
+				and I ended up spending more time deciphering my own code than actually fixing the problem.
+				So I threw it all out and started from scratch.
+				This time, I named every element clearly, and wrote just the bare minimum needed to flip the edge correctly,
+				because I later realized a lot of elements stays unchanged.
+
+			</p>
+
+			<figure>
+				<img src="section2\part4_2.png" alt="Teapot" style="width:80%" />
+				<figcaption>the teapot, before flip.</figcaption>
+			</figure>
+			<figure>
+				<img src="section2\part4_3.png" alt="Teapot" style="width:80%" />
+				<figcaption>the teapot, after some edge flips.</figcaption>
+			</figure>
+			<h3>Part 5: Edge split</h3>
+			<p>
+				Similar to Edge flip, I drew arrows on a diagram to help me figure out the mesh structure.
+				And then, I identified the new elements that needs to be created when performing an edge split.
+
 				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
+					<li>6 halfedges: am, ma, bm, md, mb, dm</li>
+					<li>1 vertex: m</li>
+					<li>2 faces: bottom left, bottom right</li>
+					<li>3 edges: m's left, m's right, m's bottom</li>
 				</ul>
-			</li>
-		</ul>
+				And then, I set up all the new vertex, faecs, and edges
+				by assigning their halfedge pointers, just like in Edge flip.
+				Assigning the neighbors for the halfedges requires a bit more work, but all I had to do
+				was making sure every pointers are assigned correctly based on the diagram. For example,
+				the old halfedge bc becomes mc, and similarily cb becomes cm.
+			</p>
+
+			<figure>
+				<img src="section2\part5_1.png" alt="Teapot" style="width:100%" />
+				<figcaption>the mesh before and after edge split.</figcaption>
+			</figure>
+
+			<p>
+				I noticed some interesting implementation tricks when implementing edge split.
+				<ul>
+					<li>
+						I grouped the halfedges together by triangle. For example, halfedges
+						mc, ca, and am are all inside the upper left face. It helped me organize my code and made it
+						more readable. Plus, all of them points to the same face.
+					</li>
+					<li>
+						The old halfedge bc becomes mc, and similarily cb becomes cm. Its like moving the edge bc
+						to the top, instead of creating 2 new halfedges.
+					</li>
+					<li>
+						I named my halfedges in a unique way. For example, halfedge mc originates from vertex m (the first letter), and its twin
+						is halfedge cm (reverse the letters).
+					</li>
+				</ul>
+			</p>
+			<p>
+				Below are screenshots of before and after edge splits.
+			</p>
+			<figure>
+				<img src="section2\part5_2.png" alt="Teapot" style="width:100%" />
+				<figcaption>the teapot, before edge split.</figcaption>
+			</figure>
+			<figure>
+				<img src="section2\part5_3.png" alt="Teapot" style="width:100%" />
+				<figcaption>the teapot, after some edge splits.</figcaption>
+			</figure>
+			<p>
+				Below are screenshots of before and after edge flip, and edge split combined.
+			</p>
+			<figure>
+				<img src="section2\part5_4.png" alt="Teapot" style="width:100%" />
+				<figcaption>the teapot, before any action.</figcaption>
+			</figure>
+			<figure>
+				<img src="section2\part5_5.png" alt="Teapot" style="width:100%" />
+				<figcaption>the teapot, after an edge flip.</figcaption>
+			</figure>
+			<figure>
+				<img src="section2\part5_6.png" alt="Teapot" style="width:100%" />
+				<figcaption>the teapot, after an edge flip, and then an edge split.</figcaption>
+			</figure>
+			<figure>
+				<img src="section2\part5_7.png" alt="Teapot" style="width:100%" />
+				<figcaption>the teapot, with edge flips and edge splits combined.</figcaption>
+			</figure>
+
+			<p>
+				Thanks to all the time I spent on fixing my messy code from edge flip,
+				I was able to finish edge split pretty quickly. There was one problem I encountered,
+				but it was very easy to debug since I groupped the half edges by triangle. I realized I was
+				assigning the face pointers wrong. It was easily fixed.
+			</p>
+
+			<figure>
+				<img src="section2\part5_weird.png" alt="Teapot" style="width:80%" />
+				<figcaption>weird bug that I encountered.</figcaption>
+			</figure>
+
+			<h3>Part 6: Loop subdivision for mesh upsampling</h3>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+			<h2>(Optional) Section III: Potential Extra Credit - Art Competition: Model something Creative</h2>
+			Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+
+			<h2>Additional Notes (please remove)</h2>
+			<ul>
+				<li>You can also add code if you'd like as so: <code>code code code</code></li>
+				<li>
+					If you'd like to add math equations,
+					<ul>
+						<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
+						<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
+					</ul>
+				</li>
+			</ul>
 		</div>
 	</body>
 </html>
