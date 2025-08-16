@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 	<head>
 		<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=default'></script>
 		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
@@ -27,80 +27,413 @@
 	</head>
 	<body>
 		<div class="container">
-		<h1>CS184/284A Spring 2025 Homework 3 Write-Up</h1>
-		<div style="text-align: center;">Names: </div>
+			<h1>CS184/284A Spring 2025 Homework 3 Write-Up</h1>
+			<div style="text-align: center;">Names: ZHENGZHENG LUO</div>
 
-		<br>
+			<br>
 
-		Link to webpage: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-		Link to GitHub repository: (TODO) <a href="https://cs184.eecs.berkeley.edu/sp25">cs184.eecs.berkeley.edu/sp25</a>
-		
-		<figure>
-			<img src="cornell.png" alt="Cornell Boxes with Bunnies" style="width:70%"/>
-			<figcaption>You can add images with captions!</figcaption>
-		</figure>
+			Link to webpage: <a href="https://cal-cs184.github.io/hw-webpages-su25-etihwww/hw3/index.html">https://cal-cs184.github.io/hw-webpages-su25-etihwww</a>
 
-		<!--
-		We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
-		-->
+			<br>
 
-		<h2>Overview</h2>
-		Give a high-level overview of what you implemented in this homework. Think about what you've built as a whole. Share your thoughts on what interesting things you've learned from completing the homework.
+			Link to GitHub repository: <a href="https://github.com/cal-cs184/hw-pathtracer-updated-super-awesome-name3">https://github.com/cal-cs184/hw-pathtracer-updated-super-awesome-name3</a>
 
-		<h2>Part 1: Ray Generation and Scene Intersection</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<figure>
+				<img src="cornell.png" alt="Cornell Boxes with Bunnies" style="width:70%" />
+				<figcaption>You can add images with captions!</figcaption>
+			</figure>
 
-		<p>Here is an example 2x2 gridlike structure using an HTML table. Each <b>tr</b> is a row and each <b>td</b> is a column in that row. You might find this useful for framing and showing your result images in an organized fashion.</p>
-		<div style="display: flex; flex-direction: column; align-items: center;">
-			<table style="width: 100%; text-align: center; border-collapse: collapse;">
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
-			  <tr>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-				<td style="text-align: center;">
-				  <img src="cornell.png" width="400px"/>
-				  <figcaption>Caption goes here.</figcaption>
-				</td>
-			  </tr>
+			<!--
+	We've already added one heading per part, to make your write-up as navigable when grading. Please fit your write-up within these sections!
+	-->
+
+			<h2>Overview</h2>
+			This project builds a path tracer that simulates how light travels and bounces around a 3D scene to create realistic images.
+			implement key parts like ray generation, intersection tests, lighting calculations, global illumination, and acceleration structures (BVH) to make rendering faster.
+			By the end, the renderer can handle direct and indirect lighting, soft shadows.
+			<h2>Part 1: Ray Generation and Scene Intersection</h2>
+			<h3>Ray Generation</h3>
+			<p>
+				Convert pixel coords to normalized image space, then to sensor space: shift to the sensor center and scale by <code>tan(fov/2)</code> to get <code>(x_, y_)</code>.
+				The camera-space ray is <code>origin = camera_pos</code>, <code>direction = normalize( (x_, y_, -1) )</code>.
+				Transform the ray direction (and origin) to world space, then normalize.
+				Set <code>ray.min_t = nclip</code> and <code>ray.max_t = fclip</code>.
+			</p>
+
+			<h3>Pixel Sampling</h3>
+			<p>
+				take <code>ns_aa</code> samples inside the pixel.
+				For each sample, repeat the ray-generation steps and accumulate radiance.
+				Average the <code>ns_aa</code> estimates and write the result to the framebuffer.
+			</p>
+
+			<h3>Primitive Intersection</h3>
+			<p>
+				To determine if a ray intersects a sphere, we solve for the parameter <code>t</code> in the equation
+				<code>‖(o + t·d − c)‖² − R² = 0</code>, where <code>o</code> is the ray origin, <code>d</code> is the ray direction,
+				<code>c</code> is the sphere’s center, and <code>R</code> is its radius. Expanding this equation produces a standard
+				quadratic form with coefficients <code>a</code>, <code>b</code>, and <code>c</code>. The intersection times are found using
+				<code>t = (-b ± √(b² − 4ac)) / (2a)</code>. We select the smaller valid root (if it exists and is real), and if it lies
+				within the ray’s clipping range, an intersection is confirmed. The intersection record is then updated with the hit
+				normal <code>(o + t·d − c).unit()</code>, the <code>bsdf</code>, and other relevant properties.
+			</p>
+			<h3>Triangle-Ray Intersection (Möller–Trumbore)</h3>
+			<p>
+				This algorithm uses the Möller–Trumbore algorithm to see if a ray hits a triangle.
+				It solves for three values: <b>t</b> (how far along the ray), and <b>u</b>, <b>v</b> (barycentric weights inside the triangle).
+				If <b>t</b> is within the ray’s valid range and <b>u</b>, <b>v</b>, and <b>1 − u − v</b> are each between 0 and 1, the hit is inside the triangle.
+				It’s fast because it computes these in one go, without separately testing the plane and then the triangle.
+			</p>
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part1/CBgems.png" width="400px" />
+							<figcaption>CBgems.png.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part1/CBspheres.png" width="400px" />
+							<figcaption>CBspheres.png.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part1/empty.png" width="400px" />
+							<figcaption>empty</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part1/CBbunny.png" width="400px" />
+							<figcaption>CBbunny.png.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part1/empty.png" width="400px" />
+							<figcaption>empty</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part1/cow.png" width="400px" />
+							<figcaption>COW.png.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<h2>Part 2: Bounding Volume Hierarchy</h2>
+			<table border="1">
+				<tr>
+					<th>file</th>
+					<th>time without BVH (sec)</th>
+					<th>time with BVH (sec) </th>
+					<th>primitives</th>
+				</tr>
+				<tr>
+					<td>cow</td>
+					<td>22.4543</td>
+					<td>0.1512</td>
+					<td>5856 </td>
+				</tr>
+				<tr>
+					<td>maxplanck</td>
+					<td>150.5058</td>
+					<td>0.5871</td>
+					<td>50801</td>
+				</tr>
+				<tr>
+					<td>CBdragon</td>
+					<td>taking too long</td>
+					<td>0.1730</td>
+					<td>100012 </td>
+				</tr>
 			</table>
-		</div>
-		
-		<h2>Part 2: Bounding Volume Hierarchy</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<h2>Part 3: Direct Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<p>
+				Using a BVH makes rendering much faster.
+				On the <b>cow</b> scene (5,856 prims), time dropped from 22.45 s to 0.15 s (~149× faster).
+				On <b>maxplanck</b> (50,801 prims), it fell from 150.51 s to 0.59 s (~256× faster).
+				For <b>CBdragon</b> (100,012 prims), the version without BVH took too long to finish,
+				while BVH rendered it in 0.17 s. In short: BVH turns a slow, brute-force check into a quick,
+				structured search, giving huge speedups even on medium-sized scenes.
+			</p>
 
-		<h2>Part 4: Global Illumination</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
-		<h2>Part 5: Adaptive Sampling</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+			<figure>
+				<img src="part2/CBdragon.png" alt="Cornell Boxes with Bunnies" style="width:70%" />
+				<figcaption>CBdragon!</figcaption>
+			</figure>
+			<figure>
+				<img src="part2/cow.png" alt="Cornell Boxes with Bunnies" style="width:70%" />
+				<figcaption>cow!</figcaption>
+			</figure>
+			<figure>
+				<img src="part2/maxplanck.png" alt="Cornell Boxes with Bunnies" style="width:70%" />
+				<figcaption>maxplanck!</figcaption>
+			</figure>
 
-		<h2>(Optional) Part 6: Extra Credit Opportunities</h2>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-		
-		<h2>Additional Notes (please remove)</h2>
-		<ul>
-			<li>You can also add code if you'd like as so: <code>code code code</code></li>
-			<li>If you'd like to add math equations, 
-				<ul>
-					<li>You can write inline equations like so: \( a^2 + b^2 = c^2 \)</li>
-					<li>You can write display equations like so: \[ a^2 + b^2 = c^2 \]</li>
-				</ul>
-			</li>
-		</ul>
-		</div>
-	</body>
+			<p>
+				The Bounding Volume Hierarchy (BVH) speeds up ray–primitive intersection by organizing primitives into a tree.
+				At each <code>BVHNode</code>, a bounding box is built for all input primitives, and an axis is chosen at random for splitting.
+				The split position is the centroid along the chosen axis; for example, if the x-axis is chosen,
+				<code>center = bbox.centroid().x</code> gives the split coordinate. Using <code>std::partition</code>, the primitive list is divided so that
+				any primitive with a centroid less than the split coordinate is placed in the left half.
+			</p>
+
+			<p>
+				The <code>construct_bvh</code> function is then called recursively for the left and right halves until the number of primitives
+				in a node is less than <code>max_leaf_size</code>.
+			</p>
+
+			<p>
+				Choosing a random axis helps prevent worst-case scenarios. For example, with a very large mesh next to a group of very
+				dense, tiny meshes, always choosing the longest axis can result in poor splits, where one child node repeatedly
+				contains only a single primitive. Random axis selection
+				breaks these worst cases and produces more balanced trees.
+			</p>
+
+
+
+			<h2>Part 3: Direct Illumination</h2>
+			<section>
+				<h3>Hemisphere Sampling</h3>
+				<p>
+					For each sample, generate a random direction in the local hemisphere using hemisphereSampler (with probability 1 / (2π)) and transform it to world space with o2w. Create a ray from hit_p in this direction. If the ray hits an object that emits light, add its contribution to the estimate using
+					estimator += emission * isect.bsdf->f(w_out, -sample) * dot(w2o * isect.n, sample).
+					After processing all samples, divide the total radiance by the number of samples and the sampling probability to get the average. Set direct_ray.min_t to EPS_F to avoid intersecting the starting surface.
+				</p>
+
+				<h3>Importance Sampling</h3>
+				<p>
+					For each scene light, call <code>light->sample_L()</code> to get a world-space direction,
+					distance, and sampling pdf. Cast a shadow ray from <code>hit_p</code> toward <code>wi</code> with
+					<code>min_t = EPS_F</code> and <code>max_t = distToLight − EPS_F</code>. If unoccluded, accumulate
+					<code>L * BSDF(wo, wi) * cos(theta) / pdf</code>. Sample delta (point) lights once; sample area lights
+					<code>num_samples</code> times and average. This usually produces less noise than uniform hemisphere sampling.
+				</p>
+			</section>
+
+			<p>compare the noise levels in soft shadows when rendering with 1, 4, 16, and 64., with CBspheres_lambertian.dae</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part3/ex/spheres_l1.png" width="400px" />
+							<figcaption>spheres_l1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part3/ex/spheres_l4.png" width="400px" />
+							<figcaption>spheres_l4.png.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part3/ex/spheres_l16.png" width="400px" />
+							<figcaption>spheres_l16</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part3/ex/spheres_l64.png" width="400px" />
+							<figcaption>spheres_l64.png.</figcaption>
+						</td>
+					</tr>
+				</table>
+			</div>
+
+			<p>
+				Light sampling usually produces clearer and less noisy results than uniform hemisphere sampling.
+				In hemisphere sampling, many rays are sent in random directions
+				that don’t hit a light, so lots of samples are wasted and shadows look grainy.
+				In light sampling, rays are aimed directly toward lights, so most samples contribute useful lighting information.
+				This makes the image converge faster to smooth, accurate lighting and shadows.
+			</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part3/ex/hemi.png" width="400px" />
+							<figcaption>uniform hemisphere sampling.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part3/ex/light.png" width="400px" />
+							<figcaption>importance sampling.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part3/ex/hemi2.png" width="400px" />
+							<figcaption>uniform hemisphere sampling.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part3/ex/light2.png" width="400px" />
+							<figcaption>importance sampling.</figcaption>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+
+
+
+
+			<h2>Part 4: Global Illumination</h2>
+			<p>
+				In at_least_one_bounce_radiance(), I created a new ray r_in(hit_p, o2w * w_in),
+				where hit_p is the position of the current hit point,
+				and w_in is the outgoing direction from isect.bsdf->sample_f().
+				If the current ray depth hasn’t reached the maximum depth,
+				first calculate the one-bounce radiance at this point using one_bound_radiance().
+
+				If this new ray hits another surface and Russian Roulette doesn’t stop the process,
+				at_least_one_bounce_radiance() is called again with the new ray.
+				The radiance is accumulated as:
+			</p>
+			<code>
+				L_out += at_least_one_bounce_radiance(r_in, isect_in) * bsdf
+				* dot(w2o * isect.n, w_in) / pdf / CONT_PROB;
+
+			</code>
+
+			<p>
+				Each time the function is called, the depth decreases by one.
+				The recursion ends when the depth reaches zero or Russian Roulette stops it.
+				The continuation probability for Russian Roulette is 0.7.
+
+				The final displayed radiance is the sum of the result
+				from at_least_one_bounce_radiance() and zero_bound_radiance().
+			</p>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part4/bunny.png" width="400px" />
+							<figcaption>bunny.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/spheres.png" width="400px" />
+							<figcaption>spheres.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/coil.png" width="400px" />
+							<figcaption>coil.</figcaption>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part4/bunny.png" width="400px" />
+							<figcaption>bunny.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/spheres.png" width="400px" />
+							<figcaption>spheres.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/coil.png" width="400px" />
+							<figcaption>coil.</figcaption>
+						</td>
+					</tr>
+
+				</table>
+
+
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part4/bounce_m0.png" width="400px" />
+							<figcaption>bounce_m0.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/bounce_m1.png" width="400px" />
+							<figcaption>bounce_m1.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/bounce_m2.png" width="400px" />
+							<figcaption>bounce_m2.</figcaption>
+						</td>
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part4/bounce_m3.png" width="400px" />
+							<figcaption>bounce_m3.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/bounce_m4.png" width="400px" />
+							<figcaption>bounce_m4.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part4/bounce_m5.png" width="400px" />
+							<figcaption>bounce_m5.</figcaption>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+
+
+
+			<h2>Part 5: Adaptive Sampling</h2>
+			<section>
+
+				<p>
+					In <code>raytrace_pixel()</code>, each sample gives a luminance value <code>x_k</code> from
+					<code>est_radiance_global_illumination()</code>.  keep running sums
+					<code>s1 = Σ x_k</code> and <code>s2 = Σ x_k²</code> to estimate the mean and variance:
+					<code>μ = s1 / n</code>, <code>σ² = (s2 − s1² / n) / (n − 1)</code>.
+					Every <code>samplesPerBatch</code> iterations, compute a 95% confidence half-width
+					<code>I = 1.96 · σ / √n</code>. If <code>I ≤ maxTolerance · μ</code> (with
+					<code>maxTolerance = 0.05</code>), then stop early, average the accumulated radiance
+					by <code>n</code>, write it to <code>sampleBuffer</code>, and record <code>n</code> in
+					<code>sampleCountBuffer</code>.
+				</p>
+			</section>
+
+			<div style="display: flex; flex-direction: column; align-items: center;">
+				<table style="width: 100%; text-align: center; border-collapse: collapse;">
+					<tr>
+						<td style="text-align: center;">
+							<img src="part5/spheres.png" width="400px" />
+							<figcaption>sphere1024.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part5/spheres_rate.png" width="400px" />
+							<figcaption>sphere-rate1024.</figcaption>
+						</td>
+
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part5/output.png" width="400px" />
+							<figcaption>sphere2048.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part5/output_rate.png" width="400px" />
+							<figcaption>sphere-rate2048.</figcaption>
+						</td>
+
+					</tr>
+					<tr>
+						<td style="text-align: center;">
+							<img src="part5/output2.png" width="400px" />
+							<figcaption>coil2048.</figcaption>
+						</td>
+						<td style="text-align: center;">
+							<img src="part5/output2_rate.png" width="400px" />
+							<figcaption>coil-rate2048.</figcaption>
+						</td>
+
+					</tr>
+
+				</table>
+			</div>
+
+			<h2>Acknowledgement of AI</h2>
+			<p>
+				I used AI to improve grammar and phrasing in English, and asked how to format phrases for example <code>t = (-b ± √(b² − 4ac)) / (2a)</code> in html.
+			</p>
 </html>
